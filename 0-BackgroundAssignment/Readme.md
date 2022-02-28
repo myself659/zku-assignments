@@ -59,6 +59,8 @@ function giveRightToVoters(address[] memory _voters) external {
 }
 ```
 
+The full code is [here](https://github.com/myself659/zku-assignments/blob/main/0-BackgroundAssignment/Ballot/Ballot.sol)
+
 ## gas cost
 
 giveRightToVote:
