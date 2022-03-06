@@ -43,6 +43,7 @@ template Merkle8 () {
  component main = Merkle8();
 
 ```
+more code is [here](https://github.com/myself659/zku-assignments/tree/main/1-week1/Q1).
 
 ## public.json
 
@@ -52,15 +53,18 @@ template Merkle8 () {
 ]
 ```
 
-the proof of public.json is as follow:
+the proof and verification of public.json is as follow:
 
 ![](Q1-public.png)
+
+![](Q1-verify.png)
 
 ## Do we really need zero-knowledge proof for this? Can a publicly verifiable smart contract that computes Merkle root achieve the same? If so, give a scenario where Zero-Knowledge proofs like this might be useful. Are there any technologies implementing this type of proof? Elaborate in 100 words on how they work.
 
 
 ## As you may have noticed, compiling circuits and generating the witness is an elaborate process. Explain what each step is doing. Optionally, you may create a bash script and comment on each step in it. This script will be useful later on to quickly compile circuits.
 
+Sorry. I don't have enough time.
 
 # Q2
 

@@ -60,21 +60,17 @@ mimc.out...
 circom merkle8.circom --r1cs --wasm --sym --c
 node generate_witness.js merkle8.wasm input.json witness.wtns
 
-snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
-snarkjs powersoftau contribute pot12_0000.ptau pot12_0001.ptau --name="First contribution" -v
-snarkjs powersoftau prepare phase2 pot12_0001.ptau pot12_final.ptau -v
+
 
 snarkjs powersoftau new bn128 20 pot20_0000.ptau -v
 snarkjs powersoftau contribute pot20_0000.ptau pot20_0001.ptau --name="First contribution" -v
 snarkjs powersoftau prepare phase2 pot20_0001.ptau pot20_final.ptau -v
 snarkjs groth16 setup merkle8.r1cs pot20_final.ptau merkle8_0000.zkey
 
-snarkjs powersoftau new bn128 24 pot24_0000.ptau -v
-snarkjs powersoftau contribute pot27_0000.ptau pot27_0001.ptau --name="First contribution" -v
-snarkjs powersoftau prepare phase2 pot27_0001.ptau pot28_final.ptau -v
 
 
-snarkjs groth16 setup merkle8.r1cs pot12_final.ptau merkle8_0000.zkey
+
+snarkjs groth16 setup merkle8.r1cs pot20_final.ptau merkle8_0000.zkey
 snarkjs zkey contribute merkle8_0000.zkey merkle8_0001.zkey --name="1st Contributor Name" -v
 snarkjs zkey export verificationkey merkle8_0001.zkey verification_key.json
 
