@@ -13,7 +13,7 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
     // merkleTree leaves
     bytes32[] private leaves;
 
-    bytes32[]  hashes;
+    // bytes32[]  hashes;
 
     // record minted address
     mapping(address => bool) public alreadyMinted;
@@ -24,14 +24,14 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 
     uint256 private reserveID;
     uint256 private currentSaleID;
-    uint256 public constant maxID = 1024;
+    uint256 public constant maxID = 128;
 
     string private baseURI = "zkuc_";
     bool private saleStarted = true;
 
     constructor() ERC721("ZKU Celebration", "ZKUC") {
         reserveID = 1; // item 1-127
-        currentSaleID = 128; // item 128-1024
+        currentSaleID = 32; // item 128-1024
     }
 
 
@@ -62,7 +62,8 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
         address receiver,
         uint256 tokenId
     ) private {
-        // bytes32[] storage hashes;
+        bytes32[] memory hashes = new bytes32[](128);
+
         // get tokenURI by tokenId
         string memory _tokenURI = tokenURI(tokenId);
         // compute leaveHash
@@ -73,26 +74,31 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
         leaves.push(leaveHash);
 
         for (uint256 i = 0; i < leaves.length; i++) {
-            hashes.push(leaves[i]);
+           hashes[i] = leaves[i];
+        }
+        // update merkle tree
+        uint256 n = leaves.length;
+        while(n > 1) {
+            uint256 i = 0;
+            uint256 j = 0;
+            if (n % 2 == 0) {
+                for(; i <= n-2 ;  i += 2 ){
+                    hashes[j] = keccak256(abi.encodePacked(hashes[i],hashes[i + 1]));
+                    j++;
+                }
+                n = n / 2;
+            }else {
+                 for(; i <= n-3 ;  i += 2 ){
+                    hashes[j] = keccak256(abi.encodePacked(hashes[i],hashes[i + 1]));
+                    j++;
+                }
+                n = n / 2 +1;
+            }
+
+
         }
 
-        uint256 n = leaves.length;
-        uint256 offset = 0;
-        while (n > 0) {
-            for (uint256 i = 0; i < n - 1; i += 2) {
-                hashes.push(
-                    keccak256(
-                        abi.encodePacked(
-                            hashes[offset + i],
-                            hashes[offset + i + 1]
-                        )
-                    )
-                );
-            }
-            offset += n;
-            n = n / 2;
-        }
-        merkleRoot = hashes[hashes.length - 1];
+        merkleRoot = hashes[0];
         delete hashes;
     }
 

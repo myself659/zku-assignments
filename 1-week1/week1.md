@@ -63,6 +63,9 @@ the proof and verification of public.json is as follow:
 
 ## Do we really need zero-knowledge proof for this? Can a publicly verifiable smart contract that computes Merkle root achieve the same? If so, give a scenario where Zero-Knowledge proofs like this might be useful. Are there any technologies implementing this type of proof? Elaborate in 100 words on how they work.
 
+We do not really need zero-knowledge proof for this. Yes, a publicly verifiable smart contract that computes Merkle root achieve the same.
+
+
 
 ## As you may have noticed, compiling circuits and generating the witness is an elaborate process. Explain what each step is doing. Optionally, you may create a bash script and comment on each step in it. This script will be useful later on to quickly compile circuits.
 
@@ -88,7 +91,7 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
     // merkleTree leaves
     bytes32[] private leaves;
 
-    bytes32[]  hashes;
+    // bytes32[]  hashes;
 
     // record minted address
     mapping(address => bool) public alreadyMinted;
@@ -99,14 +102,14 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 
     uint256 private reserveID;
     uint256 private currentSaleID;
-    uint256 public constant maxID = 1024;
+    uint256 public constant maxID = 128;
 
     string private baseURI = "zkuc_";
     bool private saleStarted = true;
 
     constructor() ERC721("ZKU Celebration", "ZKUC") {
         reserveID = 1; // item 1-127
-        currentSaleID = 128; // item 128-1024
+        currentSaleID = 32; // item 128-1024
     }
 
 
@@ -137,7 +140,8 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
         address receiver,
         uint256 tokenId
     ) private {
-        // bytes32[] storage hashes;
+        bytes32[] memory hashes = new bytes32[](128);
+
         // get tokenURI by tokenId
         string memory _tokenURI = tokenURI(tokenId);
         // compute leaveHash
@@ -148,26 +152,31 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
         leaves.push(leaveHash);
 
         for (uint256 i = 0; i < leaves.length; i++) {
-            hashes.push(leaves[i]);
+           hashes[i] = leaves[i];
+        }
+        // update merkle tree
+        uint256 n = leaves.length;
+        while(n > 1) {
+            uint256 i = 0;
+            uint256 j = 0;  
+            if (n % 2 == 0) {
+                for(; i <= n-2 ;  i += 2 ){
+                    hashes[j] = keccak256(abi.encodePacked(hashes[i],hashes[i + 1]));
+                    j++;
+                }
+                n = n / 2;
+            }else {
+                 for(; i <= n-3 ;  i += 2 ){
+                    hashes[j] = keccak256(abi.encodePacked(hashes[i],hashes[i + 1]));
+                    j++;
+                }
+                n = n / 2 +1;
+            }
+
+
         }
 
-        uint256 n = leaves.length;
-        uint256 offset = 0;
-        while (n > 0) {
-            for (uint256 i = 0; i < n - 1; i += 2) {
-                hashes.push(
-                    keccak256(
-                        abi.encodePacked(
-                            hashes[offset + i],
-                            hashes[offset + i + 1]
-                        )
-                    )
-                );
-            }
-            offset += n;
-            n = n / 2;
-        }
-        merkleRoot = hashes[hashes.length - 1];
+        merkleRoot = hashes[0];
         delete hashes;
     }
 
@@ -213,21 +222,30 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 ```
 
 
-## deploy contract  
-
-![](Q2-deploy.png)
-
 ## MINT-1
 
 ![](q2-mint1.png)
+
+<!--
+253413
+0x4e047ca7efdd85e5491ef93463b8127df3f48661ac25b1f064a5c691762c0a29
+ -->
 
 ## MINT-2
 
 ![](q2-mint2.png)
 
+<!--
+226695
+0x6eb9f8ea6f2f546fecc2008c93aeda5b97dd47c7b14184c93eddf179c2a4785c
+ -->
 ## MINT-3
 
 ![](q2-mint3.png)
+
+<!--
+0x0e347b13a6ea4e54cd1d8838d7a576d896c65307389e80978edb2747e6055f85
+ -->
 
 ## MINT-4
 
@@ -241,6 +259,7 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 
 ## 1. Summarize the key differences (in application, not in theory) between SNARKs and STARKs in 100 words.
 
+
 ## 2. How is the trusted setup process different between Groth16 and PLONK?
 
 One additional imperfection of Groth 16 is that it is actually a proving system with circuit-specific common reference string. That means the proof system can only support a fixed circuit in the setup phase for the prover. That means, when the proof system is used in other different applications, we must re-run the setup phase with different parameters.
@@ -253,6 +272,7 @@ https://medium.com/qed-it/diving-into-the-snarks-setup-phase-b7660242a0d7
 
 ## 4. Give a novel idea on how we can apply ZK for Dao Tooling. (Yes, we know voting is a very popular one, but what else can ZK do?)
 
+<!--
 链上资产证明。
 
 Voting and guaranteeing fair election results.
@@ -260,6 +280,7 @@ Voting and guaranteeing fair election results.
 AMMs: Novel AMM designs are possible using our technology, including dAMM, a design where liquidity is shared across multiple independent L2 solutions.
 
 Data Management; monitoring supply chains, managing medical information, maintaining real estate records, tracking royalties in the music industry, and more.
+-->
 
 # reference
 
