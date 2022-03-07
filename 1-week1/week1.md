@@ -1,7 +1,9 @@
 
 # Q1
 
-## circom code  
+## circom code
+
+detailed code is [here](https://github.com/myself659/zku-assignments/tree/main/1-week1/Q1).
 
 ```
 pragma circom 2.0.0;
@@ -44,7 +46,7 @@ template Merkle8 () {
 
 ```
 
-detailed code is [here](https://github.com/myself659/zku-assignments/tree/main/1-week1/Q1).
+
 
 ## public.json
 
@@ -63,17 +65,22 @@ the proof and verification of public.json is as follow:
 
 ## Do we really need zero-knowledge proof for this? Can a publicly verifiable smart contract that computes Merkle root achieve the same? If so, give a scenario where Zero-Knowledge proofs like this might be useful. Are there any technologies implementing this type of proof? Elaborate in 100 words on how they work.
 
+Answer:
 We do not really need zero-knowledge proof for this. Yes, a publicly verifiable smart contract that computes Merkle root achieve the same.
 
+The scenario for Zero-Knowledge proofs: vote in Dao. Using Zero-Knowledge proofs to  prove that someone voted, but don't know who voted.
 
+The technologies implementing this type of proof is as follow:
+- zksnarks
+- zkSTARKs
+- Ring signature
 
-## As you may have noticed, compiling circuits and generating the witness is an elaborate process. Explain what each step is doing. Optionally, you may create a bash script and comment on each step in it. This script will be useful later on to quickly compile circuits.
-
-Sorry. I don't have enough time.
 
 # Q2
 
 ## code
+
+detailed code is [here](https://github.com/myself659/zku-assignments/tree/main/1-week1/Q2).
 
 ```
 // SPDX-License-Identifier: MIT
@@ -158,7 +165,7 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
         uint256 n = leaves.length;
         while(n > 1) {
             uint256 i = 0;
-            uint256 j = 0;  
+            uint256 j = 0;
             if (n % 2 == 0) {
                 for(; i <= n-2 ;  i += 2 ){
                     hashes[j] = keccak256(abi.encodePacked(hashes[i],hashes[i + 1]));
@@ -224,7 +231,9 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 
 ## MINT-1
 
-![](q2-mint1.png)
+
+
+![first minted](q2-mint1.png)
 
 <!--
 253413
@@ -259,18 +268,54 @@ contract ZKU_Celebration is ERC721Enumerable, Ownable {
 
 ## 1. Summarize the key differences (in application, not in theory) between SNARKs and STARKs in 100 words.
 
+Answer:
 
-## 2. How is the trusted setup process different between Groth16 and PLONK?
+the key differences between SNARKs and STARKs :
 
-One additional imperfection of Groth 16 is that it is actually a proving system with circuit-specific common reference string. That means the proof system can only support a fixed circuit in the setup phase for the prover. That means, when the proof system is used in other different applications, we must re-run the setup phase with different parameters.
+- SNARKs require a trusted setup, but STARKs do not.
+- STARKs is more easy to scale than SNARKs in application
+- SNARKs are not post-quantum secure, but STARKs are post-quantum secure
+
 
 <!--
+zk-SNARKs (Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge)
+zk-STARKs technology requires the implementation of a trusted execution environment
+ZK-STARKs, invented by StarkWare, enforce the integrity and privacy of computations on blockchains, using novel cryptographic proofs and modern algebra. ZK-STARKs allow blockchains to move computations to a single off-chain STARK prover and then verify the integrity of those computations using an on-chain STARK Verifier.
+https://z.cash/technology/zksnarks/
+https://starkware.co/stark-math-a-very-short-primer/
+
+https://medium.com/coinmonks/zk-snarks-a-realistic-zero-knowledge-example-and-deep-dive-c5e6eaa7131c
+https://medium.com/cryptodigest/digital-identity-privacy-and-zero-knowledge-proofs-zk-snarks-3d092b509990
+https://medium.com/coinmonks/zk-starks-create-verifiable-trust-even-against-quantum-computers-dd9c6a2bb13d
+ -->
+
+## 2. How is the trusted setup process different between Groth16 and PLONK?
+Answer:
+
+PLONK's trusted setup is universal setup. This means two things: first, instead of there being one separate trusted setup for every program you want to prove things about, there is one single trusted setup for the whole scheme after which you can use the scheme with any program. This means two things: first, instead of there being one separate trusted setup for every program you want to prove things about, there is one single trusted setup for the whole scheme after which you can use the scheme with any program
+
+Groth16's trusted setup is non-universal setup.This means two things: frist, you need separate trusted setup for every program, second, the trusted setup can not be updateable, when the program change, you need to repeate the trusted setup process.
+
+
+
+
+<!--
+https://research.metastate.dev/plonk-by-hand-part-1/
 https://medium.com/qed-it/diving-into-the-snarks-setup-phase-b7660242a0d7
+https://vitalik.ca/general/2019/09/22/plonk.html
+https://mp.weixin.qq.com/s/yEMs7xoGG5DmUfr-aivf9A
+One additional imperfection of Groth 16 is that it is actually a proving system with circuit-specific common reference string. That means the proof system can only support a fixed circuit in the setup phase for the prover. That means, when the proof system is used in other different applications, we must re-run the setup phase with different parameters.
+
  -->
 ## 3. Give an idea of how we can apply ZK to create unique usage for NFTs.
+Answer:
+
+apply ZK for NFTs：auction and pricing(making NFTs's price more reasonable and improving liquidity for NFTs ).
 
 
 ## 4. Give a novel idea on how we can apply ZK for Dao Tooling. (Yes, we know voting is a very popular one, but what else can ZK do?)
+Answer:
+apply ZK for Dao Governance like [immutable x](https://www.immutable.com/) to reduce the gas price and improve use experience.
 
 <!--
 链上资产证明。

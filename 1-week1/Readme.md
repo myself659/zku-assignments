@@ -28,6 +28,15 @@ npm install -g snarkjs
 
 [Snarkjs Error: File not being found even though the file is present in the specified location](https://stackoverflow.com/questions/65757006/snarkjs-error-file-not-being-found-even-though-the-file-is-present-in-the-speci)
 
+## installing for c++
+
+```
+sudo apt install nlohmann-json-dev
+sudo apt-get install libgmp-dev
+```
+
+
+
 
 # MiMCsponge
 
@@ -95,42 +104,3 @@ snarkjs groth16 prove merkle8_0001.zkey witness.wtns proof.json public.json
 A Merkle proof consists of a chunk, the root hash of the tree, and the "branch" consisting of all of the hashes going up along the path from the chunk to the root.
 
 A Merkle tree is just an efficient way to prove that something is in a set, without having to store the set. Each non leaf node of a Merkle tree is just the hash of the concatenation of it's children. Each of the leaves are the set we want to prove membership for. In a sense, the root of the Merkle tree is a digest of all of the elements in the data set. Say person A contains the root node of the Merkle tree for set S, and person B wants to convince person A that element E is in S. To do this, person B only has to provide person A with the siblings of all of the elements in the tree in the path from E to the root node. This is only log(n) nodes. So B only has to provide only log(n) pieces of data, and person A only has to store the root node. With this provided information, person A can recompute the root node of the tree, and check to make sure that it matches the one that he knows is correct. If the hash function is collision resistant, then he can be sure that E is in S.
-
-# NFT
-
-```
-bytes32 newLeaf = keccak256(abi.encodePacked(msg.sender, reciever, tokenID, tokenURI);
-```
-
-#  
-
-```
-ubuntu@Ucloud-HK:~/zku/week1/circom_production/multiplier2_cpp$ make
-g++ -c main.cpp -O3 -I.
-main.cpp:8:10: fatal error: nlohmann/json.hpp: No such file or directory
- #include <nlohmann/json.hpp>
-          ^~~~~~~~~~~~~~~~~~~
-compilation terminated.
-Makefile:9: recipe for target 'main.o' failed
-make: *** [main.o] Error 1
-```
-
-```
-sudo apt install nlohmann-json-dev
-```
-
-```
-g++ -c main.cpp -O3 -I.
-In file included from calcwit.hpp:10:0,
-                 from main.cpp:14:
-circom.hpp:5:10: fatal error: gmp.h: No such file or directory
- #include <gmp.h>
-          ^~~~~~~
-compilation terminated.
-Makefile:9: recipe for target 'main.o' failed
-make: *** [main.o] Error 1
-```
-
-```
-sudo apt-get install libgmp-dev
-```
