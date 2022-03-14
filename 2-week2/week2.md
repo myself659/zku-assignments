@@ -19,7 +19,7 @@ the existing blockchain state transition to a new state(Taking ethereum as an ex
 
 Suppose the existing blockchain state is state(n) and the new state is state(n+1).
 
-1. the execution of transactions from state(n) to state(n+1).
+1. from state(n) to state(n+1) by the execution of transactions.
 2. finial state(n+1).
 
 In summary, use math to describe(From ethereum yellow paper)：
@@ -33,7 +33,7 @@ The advantage of using verification over re-execution is as follow：
 
 ## 2. Explain in brief what is a ZK VM (virtual machine) and how it works?
 
-ZK VM is a virtual machine that executes smart contracts in a way that is compatible with zero-knowledge-proof computation. It is the key to building an EVM-compatible ZK Rollup while preserving the battle-tested code and knowledge gained after years of working with Solidity.
+ZK VM is a virtual machine that executes smart contracts in a way that is compatible with zero-knowledge-proof computation.It is the key to building an EVM-compatible ZK Rollup while preserving the battle-tested code and knowledge gained after years of working with Solidity.
 
 
 <!--
@@ -91,6 +91,9 @@ https://weijiek.medium.com/private-voting-and-whistleblowing-in-ethereum-using-s
 ## 1. What is Semaphore? Explain in brief how it works? What applications can be developed using Semaphore (mention 3-4)?
 
 Semaphore is a zero-knowledge gadget which allows Ethereum users to prove their membership of a set which they had previously joined without revealing their original identity.
+
+
+Consider Alice, Bob, and Charlie, who are users of an application built on Semaphore. They each register an identity into the application contract. Later, Alice can prove that she is part of the set of registered identities {Alice, Bob, Charlie}, without revealing that she is Alice. When she does so, she can broadcast an arbitrary string. Note that the contract ensures that she can only do so once within the context of an external nullifier. A simple way to understand an external nullifier is to think of it as a topic, towards which each user may only respond once. It serves different functions depending on the nature of the application which uses Semaphore.
 
 
 Semaphore's Application Scenarios is as follow:
@@ -160,7 +163,7 @@ yarn --frozen-lockfile
 yarn compile
 yarn test:prod
 
- -->
+-->
 
 ## 3. Use Elefria protocol on the Harmony Testnet, try to generate a ZK identity and authenticate yourself as a user.
 
@@ -178,11 +181,11 @@ Maybe we can let the user generates authToken to reduce steps and gas cost.
 
 The Steps are as follows:
 
-1. user generates authToken and submit zkid proof and  authToken to smart contract
-2. smart contract verfied  zkid proof and store authToken
+1. user generates authToken and submit zkid proof and authToken to smart contract
+2. smart contract verfied zkid proof and store authToken
 3. user send uuid and  authToken to web3/web2 platform
-4. web3/web2 platform  send  authToken to  smart contract
-5. smart contract respond uuid to  web3/web2 platform
+4. web3/web2 platform  send  authToken to smart contract
+5. smart contract respond uuid to web3/web2 platform
 6. web3/web2 platform validate uuid
 7. web3/web2 platform grant access to user
 
@@ -238,7 +241,7 @@ pathIndices
 
 output:
 
-root  
+root
 nullifierHash
 -->
 
@@ -246,7 +249,7 @@ nullifierHash
 
 The circuit process: TreeUpdateArgsHasher(oldRoot, newRoot, pathIndices, hashes, instances, blocks ) =>  argsHash
 
-Because it is update tree in batch, so  need to send raw data to  verification process.
+Because it updates tree in batch, so need to send raw data to verification process.
 The arguments sent to the contract call are as follows:
 ```
   /// @dev Insert a full batch of queued withdrawals into a merkle tree
@@ -408,22 +411,22 @@ questions for Tornado Cash:
 
 1. can harmony be the L2 for Tornado Cash like xDai? and what will need to do for it ?
 2. any plan to deploy Tornado Cash  on harmony?
-3. Tornado Cash is aim to shield transaction, is there any plan to Expand the scope of Tornado Cash's application?
+3. Tornado Cash is aimed to shield transaction, is there any plan to Expand the scope of Tornado Cash's application?
 
 
 questions for Semaphore:
 
-1.  How to abstract protocols to meet many kinds of applications requirements?
+1. How to abstract protocols to meet many kinds of applications requirements?
 
 
 ## 2. [Bonus] Regarding writing and maintaining circuits for each dapp separately, what are your thoughts about using just one circuit for all dapps? Is that even possible?  What is likely to be a standard in the future for developing Zk dapps?
 
-In theory using just one circuit for all dapps is possible , just like as an computer OS for many computer applicaion. But zk dapps often require much compute, use specific circuit for the specific dapp maybe is a better option because it is easy to develop, customized.
+In theory using just one circuit for all dapps is possible , just like as an computer OS for many computer applicaions. But zk dapps often require much compute, use specific circuit for the specific dapp maybe is a better option because it is easy to develop, customized.
 
 The standards in the future for developing Zk dapps:
 
 1. the standard zk VM to supply environment for zk dapps
-2. standard tools and standard libs for developping zk dapps
+2. standard tools and standard libs for developing zk dapps
 
 <!--
 https://hackmd.io/@HtwXZr-PTFCniCs7fWFSmQ/r1M1EMAuL
