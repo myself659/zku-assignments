@@ -223,6 +223,7 @@ The key improvements/upgrades from tornado-trees to tornado-nova are as follows:
 
 ###  Take a look at the circuits/TreeUpdateArgsHasher.circom and contracts/TornadoTrees.sol. Explain the process to update the withdrawal tree (including public, private inputs to the circuit, arguments sent to the contract call, and the on-chain verification process).
 
+<!--
 compute proof.
 
 public inputs:
@@ -239,8 +240,22 @@ output:
 
 root  
 nullifierHash
+-->
 
+
+
+The circuit process: TreeUpdateArgsHasher(oldRoot, newRoot, pathIndices, hashes, instances, blocks ) =>  argsHash
+
+Because it is update tree in batch, so  need to send raw data to  verification process.
+The arguments sent to the contract call are as follows:
 ```
+  /// @dev Insert a full batch of queued withdrawals into a merkle tree
+  /// @param _proof A snark proof that elements were inserted correctly
+  /// @param _argsHash A hash of snark inputs
+  /// @param _currentRoot Current merkle tree root
+  /// @param _newRoot Updated merkle tree root
+  /// @param _pathIndices Merkle path to inserted batch
+  /// @param _events A batch of inserted events (leaves)
  function updateWithdrawalTree(
     bytes calldata _proof,
     bytes32 _argsHash,
@@ -250,8 +265,67 @@ nullifierHash
     TreeLeaf[CHUNK_SIZE] calldata _events
   ) public
 
-function withdraw(bytes calldata _proof, bytes32 _root, bytes32 _nullifierHash, address payable _recipient, address payable _relayer, uint256 _fee, uint256 _refund) external payable nonReentrant;
 ```
+
+The the on-chain verification process is described in the code note:
+
+```
+function updateWithdrawalTree(
+        bytes calldata _proof,
+        bytes32 _argsHash,
+        bytes32 _currentRoot,
+        bytes32 _newRoot,
+        uint32 _pathIndices,
+        TreeLeaf[CHUNK_SIZE] calldata _events
+    ) public {
+        uint256 offset = lastProcessedWithdrawalLeaf;
+        require(_currentRoot == withdrawalRoot, "Proposed withdrawal root is invalid");
+        require(_pathIndices == offset >> CHUNK_TREE_HEIGHT, "Incorrect withdrawal insert index");
+
+        // pepare data for sha256
+        bytes memory data = new bytes(BYTES_SIZE);
+        assembly {
+            mstore(add(data, 0x44), _pathIndices)
+            mstore(add(data, 0x40), _newRoot)
+            mstore(add(data, 0x20), _currentRoot)
+        }
+        for (uint256 i = 0; i < CHUNK_SIZE; i++) {
+            (bytes32 hash, address instance, uint32 blockNumber) = (_events[i].hash, _events[i].instance, _events[i].block);
+            bytes32 leafHash = keccak256(abi.encode(instance, hash, blockNumber));
+
+            bytes32 withdrawal = offset + i >= withdrawalsV1Length
+                ? withdrawals[offset + i]
+                : tornadoTreesV1.withdrawals(offset + i);
+            // check leafhash
+            require(leafHash == withdrawal, "Incorrect withdrawal");
+            // push blockNumber, instance, hash to  data Array
+            assembly {
+                let itemOffset := add(data, mul(ITEM_SIZE, i))
+                mstore(add(itemOffset, 0x7c), blockNumber)
+                mstore(add(itemOffset, 0x78), instance)
+                mstore(add(itemOffset, 0x64), hash)
+            }
+            if (offset + i >= withdrawalsV1Length) {
+                delete withdrawals[offset + i];
+            } else {
+                emit WithdrawalData(instance, hash, blockNumber, offset + i);
+            }
+        }
+        // compute argsHash by sha256
+        uint256 argsHash = uint256(sha256(data)) % SNARK_FIELD;
+        // check computed argsHash and  _argsHash
+        require(argsHash == uint256(_argsHash), "Invalid args hash");
+        // verify merkle proof
+        require(treeUpdateVerifier.verifyProof(_proof, [argsHash]), "Invalid withdrawal tree update proof");
+        // verifyProof ok, update previousWithdrawalRoot
+        previousWithdrawalRoot = _currentRoot;
+        // verifyProof ok, update withdrawalRoot
+        withdrawalRoot = _newRoot;
+        // verifyProof ok, update  lastProcessedWithdrawalLeaf
+        lastProcessedWithdrawalLeaf = offset + CHUNK_SIZE;
+    }
+```
+
 
 
 ###  Why do you think we use the SHA256 hash here instead of the Poseidon hash used elsewhere?
@@ -270,6 +344,7 @@ template TreeUpdateArgsHasher(nLeaves) {
 
     var header = 256 + 256 + 32;
     var bitsPerLeaf = 256 + 160 + 32;
+    // using Sha256 to compute argsHash for verification in updateWithdrawalTree
     component hasher = Sha256(header + nLeaves * bitsPerLeaf);
     ...
 }
@@ -278,6 +353,9 @@ template TreeUpdateArgsHasher(nLeaves) {
 Because the output of TreeUpdateArgsHasher is used for merkle proof in the solidity(solidity do not support Poseidon hash). the related code is as follows:
 
 ```
+// use sha256 to process data(_currentRoot+_newRoot+_pathIndices)
+uint256 argsHash = uint256(sha256(data)) % SNARK_FIELD;
+require(argsHash == uint256(_argsHash), "Invalid args hash");
 require(treeUpdateVerifier.verifyProof(_proof, [argsHash]), "Invalid withdrawal tree update proof");
 ```
 
@@ -314,6 +392,12 @@ The full code is [here](https://github.com/myself659/tornado-nova/commit/083a294
 
 ## 4.[Bonus] Read Proposal #11 of Tornado.cash governance, what is the purpose of the newly deployed L1Unwrapper contract?
 
+The purpose is to allow Tornado Cash Nova to continue running, even without the xDai team intervention.
+
+<!--
+https://torn.community/t/proposal-upgrade-nova-implementation/2172
+https://etherscan.io/address/0x3F615bA21Bc6Cc5D4a6D798c5950cc5c42937fbd#code
+ -->
 
 # Question 4. Thinking In ZK
 
@@ -322,7 +406,10 @@ The full code is [here](https://github.com/myself659/tornado-nova/commit/083a294
 
 questions for Tornado Cash:
 
-1.
+1. can harmony be the L2 for Tornado Cash like xDai? and what will need to do for it ?
+2. any plan to deploy Tornado Cash  on harmony?
+3. Tornado Cash is aim to shield transaction, is there any plan to Expand the scope of Tornado Cash's application?
+
 
 questions for Semaphore:
 
