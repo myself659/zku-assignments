@@ -3,6 +3,16 @@
 
 ## circom code
 
+<!--
+https://kimiwublog.blogspot.com/2019/04/zk-snarks.html
+
+https://blog.iden3.io/first-zk-proof.html
+
+https://zkproof.org/2020/08/12/information-theoretic-proof-systems/
+https://zkproof.org/2020/10/15/information-theoretic-proof-systems-part-ii/
+https://vac.dev/feasibility-semaphore-rate-limiting-zksnarks
+
+ -->
 detailed code is [here](https://github.com/myself659/zku-assignments/tree/main/1-week1/Q1).
 
 ```
@@ -300,6 +310,7 @@ Groth16's trusted setup is non-universal setup.This means two things: frist, you
 
 
 <!--
+https://medium.com/aztec-protocol/plonk-benchmarks-2-5x-faster-than-groth16-on-mimc-9e1009f96dfe
 https://research.metastate.dev/plonk-by-hand-part-1/
 https://medium.com/qed-it/diving-into-the-snarks-setup-phase-b7660242a0d7
 https://vitalik.ca/general/2019/09/22/plonk.html
