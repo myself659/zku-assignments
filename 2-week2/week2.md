@@ -70,7 +70,7 @@ Overall, sololution A is more compatible and safer, but with more work; sololuti
 
 ### 5. [Bonus] Explain in detail one of the Zk VM architectures using diagrams.
 
-[](q1-zksyncEVM.jpg)
+![](q1-zksyncEVM.jpg)
 The above picture show the context of zkSync EVM.
 
 [zkSync project architecture](https://github.com/matter-labs/zksync/blob/master/docs/architecture.md) is a useful guide to learn zkysnc. But I do not have enough time to dive into the code.
@@ -391,7 +391,7 @@ yarn test
 
 The full code is [here](https://github.com/myself659/tornado-nova/commit/083a2941d796b97b2a468d1b48445e1ca2c7bf78).
 
-![q3-addtestpass.png]
+![](q3-addtestpass.png)
 
 ## 4.[Bonus] Read Proposal #11 of Tornado.cash governance, what is the purpose of the newly deployed L1Unwrapper contract?
 
