@@ -1,0 +1,89 @@
+> db.treeRootBatches.find().pretty()
+{
+        "_id" : ObjectId("623826ecdd06415992f3afbb"),
+        "roots" : [
+                "6126170557130024354065055835740477961750964763383575769216897769583500454819"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 0,
+        "transaction" : {
+                "hash" : "0x65be30a325cf98a87d89129cba482a58a3fb5e44bdd6c0f6eef49a44f454be5c",
+                "blockNumber" : 4
+        }
+}
+{
+        "_id" : ObjectId("6238274ddd06415992f3afbc"),
+        "roots" : [
+                "11286972368698509976183087595462810875513684078608517520839298933882497716792"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 0,
+        "transaction" : {
+                "hash" : "0x186ffe6ef80364af8b83fdc1876c82395b68c54436adfdd4392cc0d8e4d4ca81",
+                "blockNumber" : 5
+        }
+}
+{
+        "_id" : ObjectId("62382776dd06415992f3afbe"),
+        "roots" : [
+                "844065117618016176198175254020153160255747610269031299503255929830568685433"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 0,
+        "transaction" : {
+                "hash" : "0x859d39a3e9af9467d050f97b92320cadfdadd0315b15fb27d47ef34719731cec",
+                "blockNumber" : 6
+        }
+}
+{
+        "_id" : ObjectId("62382a68dd06415992f3afbf"),
+        "roots" : [
+                "11286972368698509976183087595462810875513684078608517520839298933882497716792",
+                "17825877380365275031141362258776365957821476667286255004479780217291997882506"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 1,
+        "transaction" : {
+                "hash" : "0x7f3b177943cfe8f13c394dcd68f154646c73885a148744ac7da8c6a79f6a06b4",
+                "blockNumber" : 19
+        }
+}
+{
+        "_id" : ObjectId("62382c7fdd06415992f3afc2"),
+        "roots" : [
+                "11286972368698509976183087595462810875513684078608517520839298933882497716792"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 0,
+        "transaction" : {
+                "hash" : "0x508ba36d633492634d1ade6b3048b8a75a2f7fa7f3b3f77458e4856d9260c5b6",
+                "blockNumber" : 27
+        }
+}
+{
+        "_id" : ObjectId("62382e65dd06415992f3afc4"),
+        "roots" : [
+                "21091143504298224892714834724772745091661177590776744154236287739175936331105"
+        ],
+        "group" : {
+                "provider" : "github",
+                "name" : "not_sufficient"
+        },
+        "__v" : 0
+}
+>

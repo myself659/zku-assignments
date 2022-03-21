@@ -66,6 +66,7 @@ mimc.out...
 # merkle8
 
 ```
+
 circom merkle8.circom --r1cs --wasm --sym --c
 node generate_witness.js merkle8.wasm input.json witness.wtns
 
