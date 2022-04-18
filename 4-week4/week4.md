@@ -15,7 +15,8 @@ https://morioh.com/p/a72fdaa98d16
 https://www.abmedia.io/chainnews-introducing-plasma-and-rollup
 https://blog.matter-labs.io/optimistic-vs-zk-rollup-deep-dive-ea141e71e075
 https://vitalik.ca/general/2021/01/05/rollup.html VIM
-https://mobile.twitter.com/mt_1466/status/1498365222356140035
+https://mobile.twitter.com/mt_1466/status/
+https://finematics.medium.com/ethereum-layer-2-scaling-explained-30ce0dadaf65
  -->
 
 Take L2 as an example, there are 4 L2 solutions to try to solve this trilemma.
